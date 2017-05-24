@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema({
   timestamps: true, // createdAt, updatedAt
 });
 
-mongoose.model('User', userSchema);
+module.exports = mongoose.model('User', userSchema);
 
 
 (async () => {
@@ -40,8 +40,9 @@ mongoose.model('User', userSchema);
     email: 'pete@gmail.com'
   })
 
-  console.log(pete);
+  // console.log(pete);
 
   // deep (multi-level) populate: http://mongoosejs.com/docs/populate.html#deep-populate
 
 })().catch(console.error).then(() => mongoose.disconnect());
+

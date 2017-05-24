@@ -1,14 +1,7 @@
-const mongoose = require('mongoose');
-const user = mongoose.model('User');
+const User = require('../models/user');
 
-class User {
-  get(req, res, next) {
-    user.find().exec()
-      .then((data) => {
-        console.log(data)
-        res.json(data);
-      })
-      .catch(next);
+module.exports = {
+  * list() {
+    this.body = yield User.find();
   }
 }
-module.exports = new User;

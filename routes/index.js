@@ -4,4 +4,6 @@ const router = module.exports = new Router();
 
 const controller = require('./../controllers/user');
 
-router.get('/', controller.get);
+router.get('/', async (ctx, next) => {
+  // controller.list()
+});
