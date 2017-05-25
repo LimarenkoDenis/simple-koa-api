@@ -13,7 +13,7 @@ router.get('/', async (ctx, next) => {
 
 router.get('/:id', async (ctx, next) => {
   if (!mongoose.Types.ObjectId.isValid(ctx.params.id)) {
-    ctx.throw(422, 'Invalid Report id');
+    ctx.throw(404, 'Invalid Report id');
   }
   const user = await User.findById(ctx.params.id);
   if (!user) {
@@ -23,12 +23,36 @@ router.get('/:id', async (ctx, next) => {
 });
 
 router.post('/', async (ctx, next) => {
-  if (ctx.errors) {
-    this.throw(422, 'Invalid params');
-  }
-  console.log(ctx.request.body)
-  // ctx.body = 'ok';
-  ctx.body = await User.create(ctx.request.body);
+  console.log(ctx)
+  // fix
+  const user = await User.create(ctx.request.body);
+  ctx.body = user;
   ctx.status = 201;
 });
 
+router.put('/:id', async (ctx, next) => {
+  if (!mongoose.Types.ObjectId.isValid(ctx.params.id)) {
+    ctx.throw(404, 'Invalid Report id');
+  }
+  const user = await User.findById(ctx.params.id);
+  if (!user) {
+    ctx.throw(404, 'User not found');
+  }
+
+  const updatedUser = await user.set(ctx.request.body).save();
+  ctx.body = updatedUser;
+});
+
+router.del('/:id', async (ctx, next) => {
+  if (!mongoose.Types.ObjectId.isValid(ctx.params.id)) {
+    ctx.throw(404, 'Invalid Report id');
+  }
+
+  const user = await User.findById(ctx.params.id);
+  if (!user) {
+    ctx.throw(404, 'User not found');
+  }
+  user.remove();
+
+  ctx.status = 200;
+});
