@@ -1,38 +1,55 @@
-// // const User = require('../models/user');
-// const User = require('../models/user');
-// const mongoose = require('mongoose');
+const User = require('../models/user');
+const mongoose = require('mongoose');
 
-// module.exports = {
-//    async list(ctx) {
-//     console.log(ctx)
-//     const user = await mongoose.model('User').find();
-//   }
-// }
+module.exports = {
 
+  async list (ctx) {
+    const user = await User.find();
+    ctx.body = user;
+  },
 
-// // const User = require('../models/user');
-// const User = require('../models/user');
-// const mongoose = require('mongoose');
+  async detail (ctx) {
+    if (!mongoose.Types.ObjectId.isValid(ctx.params.id)) {
+      ctx.throw(404, 'Invalid Report id');
+    }
+    const user = await User.findById(ctx.params.id);
+    if (!user) {
+      ctx.throw(404, 'User not found');
+    }
+    ctx.body = user;
+  },
 
-// class Customer {
-  // static param(req, res, next) {
-  //   models.customer.findById(req.params.customer, {
-  //     // include: [models.project]
-  //   })
-  //   .then(customer => {
-  //     if (!customer) {
-  //       const err = new Error('Customer Not Found');
-  //       err.status = 404;
-  //       return next(err);
-  //     }
-  //     req.customer = customer;
-  //     return next();
-  //   });
-  // }
+  async create (ctx) {
+    const user = await User.create(ctx.request.body);
+    ctx.body = user;
+    ctx.status = 201;
+  },
 
-//   static async list() {
-//     const user = await mongoose.model('User').find();
-//   }
+  async update (ctx) {
+    if (!mongoose.Types.ObjectId.isValid(ctx.params.id)) {
+      ctx.throw(404, 'Invalid Report id');
+    }
+    const user = await User.findById(ctx.params.id);
+    if (!user) {
+      ctx.throw(404, 'User not found');
+    }
 
-// }
-// module.exports = Customer;
+    const updatedUser = await user.set(ctx.request.body).save();
+    ctx.body = updatedUser;
+  },
+
+  async remove (ctx) {
+    if (!mongoose.Types.ObjectId.isValid(ctx.params.id)) {
+      ctx.throw(404, 'Invalid Report id');
+    }
+
+    const user = await User.findById(ctx.params.id);
+    if (!user) {
+      ctx.throw(404, 'User not found');
+    }
+    user.remove();
+
+    ctx.status = 200;
+  }
+
+}
