@@ -4,13 +4,15 @@ if (process.env.TRACE) {
   require('./libs/trace');
 }
 
-const Koa = require('koa');
-const app = new Koa();
-
 const config = require('config');
-
 const path = require('path');
 const fs = require('fs');
+const Koa = require('koa');
+
+const app = new Koa();
+
+// app.keys = [config.secret]
+
 
 require('./models/user');
 
