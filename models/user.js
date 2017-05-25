@@ -5,36 +5,30 @@ mongoose.set('debug', true);
 
 mongoose.connect('mongodb://localhost/test');
 
-const userSchema = new mongoose.Schema({
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    validate: [
-      {
-        validator: function checkEmail(value) {
-          return /^[-.\w]+@([\w-]+\.)+[\w-]{2,12}$/.test(value);
-        },
-        msg: 'Укажите, пожалуйста, корректный email.'
-      },
-    ],
-    lowercase: true,
-    trim: true,
-  },
+const schema = new mongoose.Schema({
+  email: { type: String, required: true, unique: true, lowercase: true, trim: true, },
+  displayName: {type: String, required: true, unique: true}
 }, {
   timestamps: true, // createdAt, updatedAt
 });
 
-module.exports = mongoose.model('User', userSchema);
+// schema.methods.toJSON = function toJSON() {
+//   return {
+//     id: this._id,
+//     email: this.email
+//   };
+// };
+
+module.exports = mongoose.model('User', schema);
 
 
 (async () => {
 
   await mongoose.model('User').remove({});
 
-  let pete = await mongoose.model('User').create({email: 'pete@gmail.com'});
-  let john = await mongoose.model('User').create({email: 'john@gmail.com'});
-  let ann = await mongoose.model('User').create({email: 'ann@gmail.com'});
+  let pete = await mongoose.model('User').create({email: 'pete@gmail.com', displayName: 'Petr'});
+  let john = await mongoose.model('User').create({email: 'john@gmail.com', displayName: 'john'});
+  let ann = await mongoose.model('User').create({email: 'ann@gmail.com', displayName: 'ann'});
 
   pete = await mongoose.model('User').findOne({
     email: 'pete@gmail.com'
@@ -44,5 +38,5 @@ module.exports = mongoose.model('User', userSchema);
 
   // deep (multi-level) populate: http://mongoosejs.com/docs/populate.html#deep-populate
 
-})().catch(console.error).then(() => mongoose.disconnect());
+})().catch(console.error)
 

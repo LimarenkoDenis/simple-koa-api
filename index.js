@@ -19,6 +19,7 @@ handlers.forEach(handler => require('./handlers/' + handler).init(app));
 
 
 app.use(require('./routes').routes());
+app.use(require('./routes').allowedMethods());
 
 app.listen(config.get('app.port'));
 
