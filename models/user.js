@@ -1,9 +1,10 @@
+const config = require('config');
 const mongoose = require('mongoose');
 mongoose.Promise = Promise;
 
 // mongoose.set('debug', true);
 
-mongoose.connect('mongodb://localhost/test');
+mongoose.connect(config.get('mongo.url'));
 
 const schema = new mongoose.Schema({
   email: { type: String, required: true, unique: true, lowercase: true, trim: true, },

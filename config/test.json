@@ -3,10 +3,6 @@
     "port": 3002
   },
   "mongo": {
-    "username": "mongo",
-    "password": "",
-    "database": "mongo",
-    "host": "mongo",
-    "dialect": "mongo"
+    "url": "mongodb://localhost/test"
   }
 }
